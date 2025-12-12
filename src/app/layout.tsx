@@ -9,14 +9,14 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Supp",
-  description: "A regular chat application",
+  description: "A regular chat application for private users",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} antialiased`} >
+        className={`${inter.variable} antialiased`}>
         {children}
       </body>
     </html>
