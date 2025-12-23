@@ -8,10 +8,11 @@ import { Separator } from "@/components/ui/separator"
 import { UserSchema, userSchema } from "@/types/userTypes"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AlertCircle } from "lucide-react"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 
 export default function SignUp() {
-    const { register, handleSubmit, reset, formState: { errors, isValid } } = useForm<UserSchema>({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<UserSchema>({
         resolver: zodResolver(userSchema),
         mode: "onChange"
     })
@@ -59,11 +60,15 @@ export default function SignUp() {
                                     </p>
                                 }
                             </div>
-                            <Button className="cursor-pointer h-10" disabled={isValid ? false : true} >
+                            <Button className="cursor-pointer h-10" >
                                 Submit
                             </Button>
                             <Separator />
-                            <GoogleButton />
+                            {/* <GoogleButton /> */}
+                            <div className="w-full flex justify-center items-center gap-1">
+                                <p className="text-sm text-zinc-600" >Already have an account ?</p>
+                                <Link href={"/auth/sign-in"} className="text-sm text-primary underline" > Login </Link>
+                            </div>
                         </div>
                     </form>
                 </div>
