@@ -18,8 +18,10 @@ export function proxy(request: NextRequest) {
 
 export const config = {
     matcher: [
+        "/api/protected/:path*",
         "/",
-        "/auth/:path",
-        "/chats"
+        "/auth/:path*",
+        "/chats",
+        "/update-avatar"
     ],
 }

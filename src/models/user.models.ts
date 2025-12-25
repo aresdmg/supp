@@ -4,7 +4,9 @@ export interface IUser extends Document {
     fullName: string,
     email: string,
     password: string,
+    avatar: string,
     refreshToken: string,
+    newAcc: boolean,
     isDeleted: boolean
 }
 
@@ -25,8 +27,18 @@ const userSchema: Schema<IUser> = new Schema({
         type: String,
         required: true
     },
+    avatar: {
+        type: String,
+        required: true,
+        default: "https://res.cloudinary.com/desamhhkj/image/upload/v1766655479/Tik_tok_profile_picture_erpml0.jpg"
+    },
     refreshToken: {
         type: String
+    },
+    newAcc: {
+        type: Boolean,
+        default: true,
+        required: true
     },
     isDeleted: {
         type: Boolean,

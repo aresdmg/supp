@@ -8,13 +8,15 @@ import { Separator } from "@/components/ui/separator"
 import { UserSchema, userSchema } from "@/types/userTypes"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios, { isAxiosError } from "axios"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 export default function SignUp() {
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const { register, handleSubmit, reset, formState: { errors } } = useForm<UserSchema>({
         resolver: zodResolver(userSchema),
@@ -23,8 +25,14 @@ export default function SignUp() {
 
     const handleLoginUser = async (data: UserSchema) => {
         try {
+            setIsLoading(true)
             const res = await axios.post(`/api/user/sign-in`, { ...data }, { withCredentials: true })
+            console.log(res);
             if (res.status === 200) {
+                if (res.data?.data?.isNew == true) {
+                    router.push('/update-avatar')
+                    return
+                }
                 router.push('/chats')
             }
         } catch (error) {
@@ -33,6 +41,7 @@ export default function SignUp() {
                 toast.error(errorMessage || "Server error")
             }
         } finally {
+            setIsLoading(false)
             reset()
         }
     }
@@ -70,7 +79,9 @@ export default function SignUp() {
                                 }
                             </div>
                             <Button className="cursor-pointer h-10" >
-                                Submit
+                                {
+                                    isLoading ? (<span> <Loader2 className="animate-spin" /> </span>) : "Submit"
+                                }
                             </Button>
                             <Separator />
                             {/* <GoogleButton /> */}
