@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
             "-password -refreshToken"
         )
 
-        return ExtendedResposne.success(200, createdUser, "User created")
+        return ExtendedResposne.success(201, createdUser, "User created")
     } catch (error) {
         console.log(chalk.bgYellow("ERROR: Failed to register user \n") + error);
         return ExtendedResposne.error(500, "Failed to register user", error)

@@ -7,21 +7,41 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { UserSchema, userSchema } from "@/types/userTypes"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios, { isAxiosError } from "axios"
 import { AlertCircle } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 export default function SignUp() {
-    const { register, handleSubmit, reset, formState: { errors} } = useForm<UserSchema>({
+    const router = useRouter()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<UserSchema>({
         resolver: zodResolver(userSchema),
         mode: "onChange"
     })
+
+    const handleLoginUser = async (data: UserSchema) => {
+        try {
+            const res = await axios.post(`/api/user/sign-in`, { ...data }, { withCredentials: true })
+            if (res.status === 200) {
+                router.push('/chats')
+            }
+        } catch (error) {
+            if (isAxiosError(error)) {
+                const errorMessage = error.response?.data?.message
+                toast.error(errorMessage || "Server error")
+            }
+        } finally {
+            reset()
+        }
+    }
 
     return (
         <>
             <div className="w-full h-screen flex justify-center items-center ">
                 <div className="min-w-lg h-auto border border-primary/20 rounded-2xl shadow shadow-amber-300/20 p-10" >
-                    <form className="w-full h-full flex flex-col gap-1.5">
+                    <form onSubmit={handleSubmit(handleLoginUser)} className="w-full h-full flex flex-col gap-1.5">
                         <div className="w-full flex justify-center items-center flex-col space-y-1.5" >
                             <h1 className="text-2xl font-semibold"> Login into Supp account </h1>
                             <p className="text-sm text-zinc-600"> Enter your credentials to get started </p>
